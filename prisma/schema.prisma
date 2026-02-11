@@ -1,0 +1,25 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Post {
+  id          String   @id @default(cuid())
+  content     String   @db.Text
+  prompt      String?  @db.Text
+  scheduledAt DateTime?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now())
+  status      String   @default("draft") // draft, scheduled, published, cancelled
+  publishedAt DateTime?
+
+  @@index([scheduledAt])
+  @@index([status])
+}
